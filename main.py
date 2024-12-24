@@ -102,30 +102,18 @@ def run_C():
 
 def run_D():
     questions = [
-            """
-            \textit{We define a family of functions (mapping $n$ keys to a table of size $m$) as almost universal: \newline
+            """\textit{We define a family of functions (mapping $n$ keys to a table of size $m$) as almost universal: \newline
             For any two distinct values from the domain of $n$ keys, the probability of randomly selecting a function from the family such that it returns the same value (among $m$ values) for both is bounded by $m^{-1/3}$. \newline
-            What is the minimum table size $m$ such that if we choose a function randomly from an almost universal family, the expected number of collisions is bounded by $\frac{1}{2}$? \newline
-            A. $n^{1/3}$ \newline
-            B. $n^{2/3}$ \newline
-            C. $n^{4/3}$ \newline
-            D. $n^2$ \newline
-            E. $n^3$ \newline
-            F. $n^6$}
-            """
+            What is the minimum table size $m$ such that if we choose a function randomly from an almost universal family, the expected number of collisions is bounded by $\frac{1}{2}$? \newline A. $n^{1/3}$ \newline B. $n^{2/3}$ \newline C. $n^{4/3}$ \newline D. $n^2$ \newline E. $n^3$ \newline F. $n^6$}"""
                 ]
 
     prompts = [
             "",
-            """
-            You are very good in computer science
-            """,
+            """You are very good in computer science""",
             ]
     
     original_answers =[
-                        """
-                        F
-                        """
+                        """F"""
                     ] 
     d_type_runner.analyze_list(questions, prompts, original_answers)
 
@@ -133,8 +121,8 @@ def run_D():
 
 def main():
     #run_A()
-    run_C()
-    #run_D()
+    #run_C()
+    run_D()
     
 
 if __name__ == '__main__':

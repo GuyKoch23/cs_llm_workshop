@@ -13,9 +13,7 @@ def comapre_d_type(answer_1, answer_2):
     return result # the result is a json format
 
 def rephrase_d_type_answer(original_question):
-    prefix = """
-                Which answer is correct? give me just the letter of the correct answer.
-            """
+    prefix = """Read the following question and choose from the correct letter from the options in the question. give me just the letter of the correct answer and no more charecters."""
     query = prefix + original_question
     result = chatgpt_util.query_single_chatgpt(query)
     return result
