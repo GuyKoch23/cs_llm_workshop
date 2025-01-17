@@ -3,128 +3,56 @@ import chatgpt_util
 import a_type_comparison_util
 import json_util
 import df_builder
+import b_type_runner
 import d_type_runner
 import a_type_runner
 import c_type_runner
+import csv_parser
 
-def run_A():
-    questions = [
-            """
-            Describe an implementation of a data structure with the following operations (x is a key):}
-            Insert(x) - in amortized time (O(log n)).
-            Search(x) - in amortized time (O(log n)).
-            Delete(x) - in amortized time (O(log n)).
-            """
-            # """
-            # Describe an implementation of a data structure with the following operations (x is a key):
-            # Insert(x) - in amortized time (O(log n)).
-            # Search(x) - in amortized time (O(log n)).
-            # Delete(x) - in amortized time (O(1)).
-            # """, 
-            # """
-            # Describe an implementation of a data structure with the following operations (x is a key):
-            # Insert(x) - in amortized time O(log n).
-            # Search(x) - in amortized time O(log n).
-            # Delete(x) - in amortized time O(1) and also in worst-case time O(1).
-            # """
-                ]
+def run_A(questions, answers, prompts):
+    a_type_runner.analyze_list(questions, prompts, answers)
 
-    prompts = [
-            "",
-            """
-            You are very good in computer science
-            """,
-            """
-            You are very good in computer science and know how to solve data structures questions, please solve the following question and explain your thinking process 
-            """,
-            """
-            You are a very smart professor in computer science, think smartly and long time about the following question:
-            """,
-            """
-            You are charlie chaplin and since you are an actor you do not know anything about computer science or data structures: 
-            """,
-            """
-            Solve the following question carefully, analyze your answer few times before responding and improve if needed, when giving me the complexity, make sure you can prove it: 
-            """
-            ]
-    
+def run_B(questions, answers, prompts):
+    b_type_runner.analyze_list(questions, prompts, answers)
 
-    original_answers =[
-                        """
-                        \textbf{Central Data Structure:} AVL Tree. \textbf{Brief Description:} We will use the standard operations of an AVL tree. \textbf{Complexity Explanation:} All operations are in worst-case in \(O(\log n)\), and therefore, in particular, amortized directly from the definition of amortized.                        
-                        """
-                        # """
-                        # \textbf{Central Data Structure:} AVL Tree. \textbf{Brief Description:} We will use the standard operations of an AVL tree. \textbf{Explanation for Complexity:} In the banker's method - at the time of insertion \((x(\text{insert})\), we insert the element, and additionally leave \(\log n\) coins for its deletion.
-                        # """,
-                        # """
-                        # \textbf{Central Data Structure:} AVL Tree. \textbf{Secondary Data Structure:} Linked List. The worst-case complexity of insert is \(O(n \log n)\). The worst-case complexity of search is \(O(n \log n)\). \textbf{Solution:}  
-                        # During initialization, we will initialize an AVL tree and a linked list.  
-                        # During deletion, we will insert \(x\) at the beginning of the linked list.  
-                        # During search/insert, before performing the actual operation, we will traverse the entire linked list and delete element by element.  
-                        # After emptying the list, we will perform the actual operation (search/insert).  
-                        # Amortized analysis using the banker's method - at the time of insertion \((x\text{, insert})\), we will insert the element and also leave it with \(\log n\) coins for its deletion.
-                        # """
-                    ] 
-    
-    a_type_runner.analyze_list(questions, prompts, original_answers)
+def run_C(questions, answers_letters, answers_sentences, prompts):
+    c_type_runner.analyze_list(questions, prompts, answers_letters, answers_sentences)
 
-def run_C():
-    questions = [
-            """
-            What is the asymptotic relationship between the following functions:
-            If there are multiple correct answers, choose the tightest one.
-            \( f(n) = \frac{n}{\log(n)}, \quad g(n) = \frac{n^2}{(\log(n))^{2004}} \)
-            \begin{enumerate}
-                \item \( f(n) = O(g(n)) \)
-                \item \( f(n) = \Omega(g(n)) \)
-                \item \( f(n) = \Theta(g(n)) \)
-                \item \( f(n) = o(g(n)) \)
-                \item \( f(n) = \omega(g(n)) \)
-            \end{enumerate}
-            """
-                ]
-
-    prompts = [
-            "",
-            """You are very good in computer science""",
-            ]
-    
-    original_answers_letters =[
-                        """a"""
-                    ] 
-    
-    original_answers_sentences = [
-        """For all \( \epsilon > 0 \), it holds that \(\log n = o(n)\)."""
-    ]
-    c_type_runner.analyze_list(questions, prompts, original_answers_letters, original_answers_sentences)
-
-
-
-def run_D():
-    questions = [
-            """\textit{We define a family of functions (mapping $n$ keys to a table of size $m$) as almost universal: \newline
-            For any two distinct values from the domain of $n$ keys, the probability of randomly selecting a function from the family such that it returns the same value (among $m$ values) for both is bounded by $m^{-1/3}$. \newline
-            What is the minimum table size $m$ such that if we choose a function randomly from an almost universal family, the expected number of collisions is bounded by $\frac{1}{2}$? \newline A. $n^{1/3}$ \newline B. $n^{2/3}$ \newline C. $n^{4/3}$ \newline D. $n^2$ \newline E. $n^3$ \newline F. $n^6$}"""
-                ]
-
-    prompts = [
-            "",
-            """You are very good in computer science""",
-            ]
-    
-    original_answers =[
-                        """F"""
-                    ] 
-    d_type_runner.analyze_list(questions, prompts, original_answers)
+def run_D(questions, answers_letters, prompts):
+    d_type_runner.analyze_list(questions, prompts, answers_letters)
 
 
 
 def main():
-    #run_A()
-    #run_C()
-    run_D()
+    path = "C:\\Guy\\Education\\TAU\\Year3\\Workshop\\output.csv"
+    
+    prompts = [
+            "",
+            """In the following question justify the data structure you have chosen for this problem. Explain why it is the most appropriate solution compared to other alternatives, considering the specific operations required. Limit your answer to 100-150 words""",
+            """In the following question consider the required methods for the data structure. Focus on those methods,  and find the best suitable implementation. The latter takes priority over any other requirements. Limit your answer to 100-150 words""",
+            """In the following question provide the time complexities for the main operations (e.g., insertion, deletion, search, access) on the chosen data structure. Be sure to explain how the complexities are derived. Limit your answer to 100-150 words""",
+            """You are a hard-working, average-level third-year undergraduate student in computer science. Your role is to eagerly learn, share your understanding of topics from your coursework, and contribute a fresh perspective to the discussion. Limit your answer to 100-150 words""",
+            """You are a highly intelligent professor specializing in data structures. Your role is to explain advanced concepts with clarity, provide deep insights, and challenge others with thought-provoking questions, while also making technical ideas approachable for less experienced participants. Limit your answer to 100-150 words""",
+            """You are a curious and imaginative 3-year-old child. Your role is to ask simple and wonder-filled questions, offer playful or creative observations, and spark fresh perspectives in the discussion through your natural sense of curiosity. Limit your answer to 100-150 words""",
+            """You are Robert Tarjan, a legendary computer scientist renowned for your groundbreaking contributions to algorithms and data structures. Your role is to bring theoretical depth, share innovative ideas, and engage with others constructively, tailoring your insights to match the group’s diverse expertise levels. Limit your answer to 100-150 words""",
+            """You are Geoffrey Hinton, a pioneering researcher in artificial intelligence and neural networks. Your role is to share cutting-edge knowledge, highlight the relevance of AI to the discussion, and inspire curiosity and innovation in others through your visionary ideas. Limit your answer to 100-150 words""",
+            """You are Hans Peter Luhn, a historical computer scientist known for your foundational work in information retrieval and text analysis. Your role is to offer historical context, connect your past innovations to modern advancements, and provide a foundational perspective to the discussion. Limit your answer to 100-150 words""",
+            """Answer the following question, let's think step by step. Limit your answer to 100-150 words""",
+            """Answer the following question and then go over your solution and improve it according to the requirements. Limit your answer to 100-150 words""",
+            """Break the following question into smaller, simpler problems, then solve them one after another and then answer the original question. Limit your answer to 100-150 words""",
+            """In the following questions, find the most important topics and ignore other parts which distract you. Answer to the point according to the relevant parts. Limit your answer to 100-150 words""",
+        ]   
+    
+    a_question_latex_list_2_3, a_question_latex_list_1_3, a_answer_latex_list_2_3, a_answer_latex_list_1_3 = csv_parser.get_questions_answers("A", path)
+    #b_question_latex_list_2_3, b_question_latex_list_1_3, b_answer_latex_list_2_3, b_answer_latex_list_1_3 = csv_parser.get_questions_answers("B", path)
+    #c_question_latex_list_2_3, c_multiple_choice_list_2_3, c_answer_latex_list_2_3, c_question_latex_list_1_3, c_multiple_choice_list_1_3, c_answer_latex_list_1_3 = csv_parser.get_questions_answers("C", path)
+    #d_question_latex_list_2_3, d_multiple_choice_list_2_3, d_question_latex_list_1_3, d_multiple_choice_list_1_3 = csv_parser.get_questions_answers("D", path)
+
+    run_A(a_question_latex_list_2_3, a_answer_latex_list_2_3, prompts)
+    #run_B(b_question_latex_list_2_3, b_answer_latex_list_2_3, prompts)
+    #run_C(c_question_latex_list_2_3, c_multiple_choice_list_2_3, c_answer_latex_list_2_3, prompts)
+    #run_D(d_question_latex_list_2_3, d_multiple_choice_list_2_3, prompts)
     
 
 if __name__ == '__main__':
     main()
-

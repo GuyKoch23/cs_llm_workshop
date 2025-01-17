@@ -1,7 +1,7 @@
 import chatgpt_util
 from concurrent.futures import ThreadPoolExecutor
 
-def rephrase_a_type_answer(original_question):
+def rephrase_b_type_answer(original_question):
     prefix = """
                 Read the following answer delimited by triple backticks: ```{answer}```
                 Parse the answer to the following format without adding any data that is not in the answer:
@@ -13,18 +13,18 @@ def rephrase_a_type_answer(original_question):
     result = chatgpt_util.query_single_chatgpt(query)
     return result
 
-def rephrase_a_type_answer_list(original_questions):
+def rephrase_b_type_answer_list(original_questions):
     # results = []
     # for original_question in original_questions:
-    #     result = rephrase_a_type_answer(original_question)
+    #     result = rephrase_b_type_answer(original_question)
     #     results.append(result)
-    results = rephrase_a_type_answer_list_concurrently(original_questions)
+    results = rephrase_b_type_answer_list_concurrently(original_questions)
     return results
 
 
-def rephrase_a_type_answer_list_concurrently(original_questions):
+def rephrase_b_type_answer_list_concurrently(original_questions):
     with ThreadPoolExecutor() as executor:
-        results = list(executor.map(rephrase_a_type_answer, original_questions))
+        results = list(executor.map(rephrase_b_type_answer, original_questions))
     return results
 
 

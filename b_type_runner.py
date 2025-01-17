@@ -1,5 +1,5 @@
-import a_type_question_util
-import a_type_comparison_util
+import b_type_question_util
+import b_type_comparison_util
 import chatgpt_util
 import df_builder
 import chatgpt_util
@@ -9,10 +9,10 @@ import pandas as pd
 import nli_util
 import bleu_util
 
-difficulty_csv_path = "questions_difficulty_rank\\type_a_difficulty_rank.csv"
-questions_responses_data_directory_path = "questions_responses_data_type_a"
-before_round_directory_path = "questions_results_before_round_type_a"
-questions_results_directory_path = "questions_results_type_a"
+difficulty_csv_path = "questions_difficulty_rank\\type_b_difficulty_rank.csv"
+questions_responses_data_directory_path = "questions_responses_data_type_b"
+before_round_directory_path = "questions_results_before_round_type_b"
+questions_results_directory_path = "questions_results_type_b"
 questions_final_avg_path = "final_avg.csv"
 
 value_to_word = {
@@ -28,12 +28,12 @@ def query_chatgpt_concurrently(prompted_questions):
 
 def rephrase_answers_concurrently(gpt_answers):
     with ThreadPoolExecutor() as executor:
-        formatted_gpt_answers = list(executor.map(a_type_question_util.rephrase_a_type_answer, gpt_answers))
+        formatted_gpt_answers = list(executor.map(b_type_question_util.rephrase_b_type_answer, gpt_answers))
     return formatted_gpt_answers
 
 def rephrase_original_answers_concurrently(original_answers):
     with ThreadPoolExecutor() as executor:
-        formatted_original_answers = list(executor.map(a_type_question_util.rephrase_a_type_answer, original_answers))
+        formatted_original_answers = list(executor.map(b_type_question_util.rephrase_b_type_answer, original_answers))
     return formatted_original_answers
 
 
@@ -41,23 +41,23 @@ def rephrase_original_answers_concurrently(original_answers):
 
 
 def analyze_list(original_questions, prompts, original_answers):
-    prompted_questions = a_type_question_util.convert_questions_to_prompted(original_questions, prompts)
+    prompted_questions = b_type_question_util.convert_questions_to_prompted(original_questions, prompts)
     question_avg_dfs = []
-    model, tokenizer = nli_util.get_mode_tokenizer()
-
+    
     print(f"starting formatting original answers")
 
     # formatted_original_answers = []
     # for original_answer in original_answers:
-    #     formatted_original_answer = a_type_question_util.rephrase_a_type_answer(original_answer)
+    #     formatted_original_answer = b_type_question_util.rephrase_b_type_answer(original_answer)
     #     formatted_original_answers.append(formatted_original_answer)
     
     formatted_original_answers = rephrase_original_answers_concurrently(original_answers)
 
     difficulty_list = []
     all_questions_responses_df = pd.DataFrame()
+    model, tokenizer = nli_util.get_mode_tokenizer()
     for i in range(len(original_questions)):
-        print(f"starting question {i}") 
+        print(f"starting question {i}")
         question_dfs = []
         question_responses_df = pd.DataFrame()
         for k in range(5):
@@ -69,7 +69,7 @@ def analyze_list(original_questions, prompts, original_answers):
 
             question_gpt_answers = query_chatgpt_concurrently(prompted_questions[i])
             question_responses_iteration_df = pd.DataFrame({
-                "Question Type": "A",
+                "Question Type": "B",
                 "Question ID": i,
                 "Iteration": k,
                 "Question": original_questions[i],
@@ -83,7 +83,7 @@ def analyze_list(original_questions, prompts, original_answers):
             # print(f"starting gpt format {i}")
             ######formatted_gpt_answers = []
             ######for question_gpt_answers in gpt_answers:
-            # question_formatted_gpt_answers = a_type_question_util.rephrase_a_type_answer_list(question_gpt_answers) # GOOD
+            # question_formatted_gpt_answers = b_type_question_util.rephrase_b_type_answer_list(question_gpt_answers) # GOOD
             ######    formatted_gpt_answers.append(question_formatted_gpt_answers)
 
             question_formatted_gpt_answers = rephrase_answers_concurrently(question_gpt_answers)
@@ -98,7 +98,7 @@ def analyze_list(original_questions, prompts, original_answers):
             # print(f"starting compare format {i}")
             for j in range(len(prompts)):
                 # DICE metric
-                compare_json = a_type_comparison_util.compare_answers_chatgpt(formatted_original_answers[i], question_formatted_gpt_answers[j])
+                compare_json = b_type_comparison_util.compare_answers_chatgpt(formatted_original_answers[i], question_formatted_gpt_answers[j])
                 compares.append(compare_json)
 
                 # nli metric
